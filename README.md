@@ -6,15 +6,27 @@ A template project for clojurescript on aws lambda.
 
 git clone
 
+cd aws-clojurescript-lambda
+
 ./build.sh
 
 Produces target/lambda.zip
 
-When uploaded to AWS.
+Uploaded to AWS.
 
-The handler function is 
+Set the handler function to be
 
-app/index.main
+"app/index.main"
+
+## REPL
+
+In Cursive choose "Use clojure.main in normal JVM process".
+Parameters: "repl/node_repl.clj"
+
+## TODO
+
+- Examples that use the AWS Javascript SDK.
+- Support packaging node_modules.
 
 
 ## License
