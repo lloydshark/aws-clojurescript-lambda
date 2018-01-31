@@ -14,7 +14,7 @@ When uploaded to AWS.
 
 The handler function is 
 
-app/index.core
+app/index.main
 
 
 ## License

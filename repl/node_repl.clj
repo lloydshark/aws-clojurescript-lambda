@@ -3,7 +3,7 @@
 (require 'cljs.repl.node)
 
 (cljs.build.api/build "src"
-                      {:main 'deploy-ui.core
+                      {:main 'lambda.core
                        :output-to "out/main.js"
                        :verbose true})
 

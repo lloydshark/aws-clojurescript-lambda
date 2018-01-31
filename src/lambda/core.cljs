@@ -4,10 +4,13 @@
 (nodejs/enable-util-print!)
 
 (defn ^:export main [event context callback]
-  ;(fred aws-sdk)
-  (println "started...")
-  (println "completed...")
-  ;(callback nil #js {:status "OK"})
+  (println event)
+  (println context)
+  (println callback)
+  ;The below line does not work - the error from the AWS console says call of undefined and nothing is printed.
+  ;But when you add the when clause it does work. I don't get it.
+  ;(callback (list nil #js {:status "OK"}))
+  (when callback (callback nil #js {:status "OK"}))
   )
 
 (set! *main-cli-fn* main)
