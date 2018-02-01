@@ -1,14 +1,14 @@
 (defproject aws-clojurescript-lambda "0.0.1"
-  :description "Minimal AWS Lambda example in clojurescript."
-  :dependencies [[org.clojure/clojure "1.8.0"]
+  :description "Minimal AWS Lambda example in Clojurescript."
+  :dependencies [[org.clojure/clojure "1.9.0"]
                  [org.clojure/clojurescript "1.9.946"]
                  ;[org.clojure/core.async "0.3.442"]
                  ]
-  :plugins [[lein-npm "0.6.1"]
-            [lein-cljsbuild "1.1.6"]]
+  :plugins [[lein-npm "0.6.2"]
+            [lein-cljsbuild "1.1.7"]]
   :source-paths ["src"]
-  :npm {:dependencies [[source-map-support "0.4.0"]
-                       [aws-sdk "2.36.0"]]}
+  :npm {:dependencies [[source-map-support "0.5.3"]
+                       [aws-sdk "2.188.0"]]}
   :cljsbuild
   {:builds [{:id "lambda-build"
              :source-paths ["src"]

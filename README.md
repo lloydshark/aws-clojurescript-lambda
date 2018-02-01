@@ -1,6 +1,6 @@
 # aws-clojurescript-lambda
 
-A template project for clojurescript on aws lambda.
+A minimalist template project for clojurescript on aws lambda.
 
 ## Usage
 
@@ -12,15 +12,14 @@ cd aws-clojurescript-lambda
 
 Produces target/lambda.zip
 
-Uploaded to AWS.
+Manually upload to AWS.
 
-Set the handler function to be
-
-"app/index.main"
+Set the handler function to be "app/index.main"
 
 ## REPL
 
 In Cursive choose "Use clojure.main in normal JVM process".
+
 Parameters: "repl/node_repl.clj"
 
 ## TODO
