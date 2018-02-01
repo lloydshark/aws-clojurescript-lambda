@@ -2,11 +2,15 @@
 
 A minimalist template project for clojurescript on aws lambda.
 
+Including some examples of how to use the raw AWS Javascript (aws-sdk) API.
+
 ## Usage
 
 git clone
 
 cd aws-clojurescript-lambda
+
+lein npm install
 
 ./build.sh
 
