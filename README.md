@@ -3,6 +3,7 @@
 A minimalist template project for clojurescript on aws lambda.
 
 Including some examples of how to use the raw AWS Javascript (aws-sdk) API.
+...and additionally how to use core async to handle the responses.
 
 ## Usage
 

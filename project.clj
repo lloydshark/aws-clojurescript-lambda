@@ -2,7 +2,7 @@
   :description "Minimal AWS Lambda example in Clojurescript."
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [org.clojure/clojurescript "1.9.946"]
-                 ;[org.clojure/core.async "0.3.442"]
+                 [org.clojure/core.async "0.3.442"]
                  ]
   :plugins [[lein-npm "0.6.2"]
             [lein-cljsbuild "1.1.7"]]
