@@ -2,6 +2,26 @@
 
 (defonce AWS (js/require "aws-sdk"))
 
+;; Cloud Formation...
+
+(defn new-cfm-client [region]
+  (AWS.CloudFormation. #js {:region region}))
+
+(defn list-stacks [s3-client result-handler]
+  (.listStacks s3-client
+                #js {}
+                result-handler))
+
+(comment
+
+  (def my-cfm-client (new-cfm-client "ap-southeast-2"))
+
+  (list-stacks my-cfm-client pretty-print-result-handler)
+
+  )
+
+;; S3...
+
 (defn new-s3-client []
   (new AWS.S3))
 
