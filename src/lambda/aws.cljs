@@ -7,10 +7,13 @@
 (defn new-cfm-client [region]
   (AWS.CloudFormation. #js {:region region}))
 
-(defn list-stacks [s3-client result-handler]
+(defn list-stacks [s3-client result-handler next-token]
+  (println "list-stacks" next-token)
   (.listStacks s3-client
-                #js {}
+               (if next-token #js{"NextToken" next-token} #js {})
                 result-handler))
+
+(defn list-all-stacks [s3-client ])
 
 (comment
 
