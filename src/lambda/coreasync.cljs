@@ -63,11 +63,11 @@
                        (partial handle-aws-result result-channel transform))
      result-channel)))
 
-(defn result->bucket-keys [result]
+(defn result->bucket-names [result]
   (map #(.-Name %) (.-Buckets result)))
 
-(defn list-bucket-keys [s3-client]
-  (list-buckets s3-client result->bucket-keys))
+(defn list-bucket-names [s3-client]
+  (list-buckets s3-client result->bucket-names))
 
 
 (comment

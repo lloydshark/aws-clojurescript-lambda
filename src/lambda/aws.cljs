@@ -1,4 +1,5 @@
-(ns lambda.aws)
+(ns lambda.aws
+  (:require [cljs.pprint :as pprint]))
 
 (defonce AWS (js/require "aws-sdk"))
 
@@ -36,7 +37,7 @@
 (defn pretty-print-result-handler [error result]
   (if error
     (println "ERROR !!!" error)
-    (println (cljs.pprint/pprint (js->clj result)))))
+    (println (pprint/pprint (js->clj result)))))
 
 (comment
 

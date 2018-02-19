@@ -56,6 +56,9 @@ really no advantage to this. So keep your compiler options as :optimizations :no
 If you've been reading along with the advancements about requiring node modules you might be tempted
 to do something fancy here.  Don't. The simple js/require is your friend. See lambda.aws namespace.
 
+#### Don't set *main-cli-fn* 
+
+This interferes with the execution. We export our functions directly for use (see index.js).
 
 
 ## License
