@@ -1,4 +1,4 @@
-(ns lambda.coreasync
+(ns lambda.async
   (:require [cljs.core.async :as async :refer [>! <! chan close!]]
             [lambda.aws :as aws])
   (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
@@ -75,7 +75,7 @@
   (def my-s3-client (aws/new-s3-client))
 
   (go
-    (let [[error result] (<! (list-bucket-keys my-s3-client))]
+    (let [[error result] (<! (list-bucket-names my-s3-client))]
       (aws/pretty-print-result-handler error result)))
 
   )
