@@ -35,9 +35,11 @@ Parameters: "repl/node_repl.clj".
 
 ## TODO
 
-- Support packaging node_modules with our lambda.
+- Package node_modules with the lambda as part of the build.
 - Provide a convenience script for creating a role for the lambda to run as.
 - Provide a convenience script for uploading the lambda.
+- Maybe use npm directly?
+- Maybe use raw clj cljs tooling instead of lein / lein-cljsbuild?
 
 ## Learnings
 
