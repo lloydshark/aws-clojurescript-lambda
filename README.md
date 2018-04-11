@@ -13,6 +13,7 @@ I wanted to produce a clojurescript lambda with very few dependencies so I could
 
 ## Usage
 
+```
 git clone
 
 cd aws-clojurescript-lambda
@@ -20,12 +21,21 @@ cd aws-clojurescript-lambda
 lein npm install
 
 ./build.sh
+```
 
-Produces target/lambda.zip
+Produces... 
+
+```
+target/lambda.zip
+```
 
 Manually upload to AWS.
 
-Set the handler function to be "app/index.main"
+Set the handler function to be...
+
+```
+app/index.main
+```
 
 ## REPL
 
@@ -40,6 +50,8 @@ Parameters: "repl/node_repl.clj".
 - Provide a convenience script for uploading the lambda.
 - Maybe use npm directly?
 - Maybe use raw clj cljs tooling instead of lein / lein-cljsbuild?
+- Provide some example tests.
+- Provide some example usage of spec.
 
 ## Learnings
 
