@@ -11,11 +11,20 @@
   :npm {:dependencies [[source-map-support "0.5.3"]
                        [aws-sdk "2.188.0"]]}
   :cljsbuild
-  {:builds [{:id "lambda-build"
+  {:test-commands {"unit-test" ["node" "target/test-main.js"]}
+   :builds [{:id "lambda-build"
              :source-paths ["src"]
              :compiler {:output-to     "app/main.js"
                         :output-dir    "app"
                         :main          "lambda.core"
+                        :source-map    true
+                        :target        :nodejs
+                        :language-in   :ecmascript5
+                        :optimizations :none}}
+            {:id "unit-test"
+             :source-paths ["src" "test"]
+             :compiler {:output-to     "target/test-main.js"
+                        :main          "lambda.core-test"
                         :source-map    true
                         :target        :nodejs
                         :language-in   :ecmascript5

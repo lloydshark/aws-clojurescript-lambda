@@ -3,9 +3,12 @@
 A minimalist template project for clojurescript on aws lambda (nodejs).
 
 Including...
-- Use of lein and lein-cljsbuild.
+
+- lein cljsbuild for builds and running tests.
+- lein npm for npm dependencies.
 - Some examples of how to use the raw AWS Javascript (aws-sdk) APIs.
-- Some examples of how to use core async to handle the responses.
+- Some examples of how to use core.async to handle the responses.
+- How to setup a figwheel-main repl in Cursive.
 
 ## Motivation
 
@@ -44,6 +47,10 @@ In Cursive choose "Use clojure.main in normal JVM process".
 Parameters: "repl/figwheel_repl.clj".
 
 (Make sure you resolved dependencies via lein first).
+
+## Testing
+
+lein cljsbuild test
 
 ## TODO
 
