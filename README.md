@@ -37,11 +37,13 @@ Set the handler function to be...
 app/index.main
 ```
 
-## REPL
+## REPL - A figwheel-main repl in Cursive.
 
 In Cursive choose "Use clojure.main in normal JVM process".
 
-Parameters: "repl/node_repl.clj".
+Parameters: "repl/figwheel_repl.clj".
+
+(Make sure you resolved dependencies via lein first).
 
 ## TODO
 
