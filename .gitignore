@@ -14,3 +14,4 @@ node_modules
 *.iml
 out
 .DS_store
+app/
