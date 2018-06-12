@@ -1,4 +1,4 @@
-(ns lambda.async
+(ns lambda.aws-async
   (:require [cljs.core.async :as async :refer [>! <! chan close!]]
             [lambda.aws :as aws])
   (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
