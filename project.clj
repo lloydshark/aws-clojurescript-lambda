@@ -1,9 +1,9 @@
 (defproject aws-clojurescript-lambda "0.0.1"
-  :description "Minimal AWS Lambda example in ClojureScript."
+  :description "An example AWS Lambda in ClojureScript."
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [org.clojure/clojurescript "1.10.238"]
-                 [org.clojure/core.async "0.3.442"]
-                 [com.bhauman/figwheel-main "0.1.1-SNAPSHOT"]
+                 [org.clojure/core.async "0.4.474"]
+                 [com.bhauman/figwheel-main "0.1.2-SNAPSHOT"]
                  ]
   :plugins [[lein-npm "0.6.2"]
             [lein-cljsbuild "1.1.7"]]

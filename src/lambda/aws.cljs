@@ -46,3 +46,21 @@
   (list-buckets my-s3-client pretty-print-result-handler)
 
   )
+
+;; KMS...
+
+(defn new-kms-client [region]
+  (AWS.KMS. #js {:region region}))
+
+(defn decrypt [kms-client cipher-text result-handler]
+  (.decrypt kms-client
+            #js {"CiphertextBlob" cipher-text}
+            result-handler))
+
+(comment
+
+  (def kms-client (new-kms-client "ap-southeast-2"))
+
+  (decrypt kms-client "encryptedtextstring" pretty-print-result-handler)
+
+  )

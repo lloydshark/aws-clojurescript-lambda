@@ -1,20 +1,24 @@
 # aws-clojurescript-lambda
 
-A minimalist template project for clojurescript on aws lambda (nodejs).
+An example project of clojurescript on aws lambda (nodejs) that demonstrates some common base requirements.
 
-Including...
+Specifically:
 
-- lein-cljsbuild for builds and running tests.
-- lein-npm for npm dependencies.
-- How to setup a figwheel-main repl in Cursive.
-- Examples of how to use the raw AWS Javascript (aws-sdk) APIs.
-- Examples of how to use core.async to handle the responses.
-- Examples of how to use clojure.test for writing tests.
-- Examples of how to access AWS Environment Properties (including KMS encrypted ones).
+- How to build a package for running on aws lambda (using lein-cljsbuild & lein-npm).
+- How to setup a figwheel-main repl in Cursive for interactive repl development.
+- How to use the raw AWS Javascript (aws-sdk) APIs.
+- How to use core.async to handle the responses from the AWS sdk.
+- How to use cljs.test for writing tests (and ensure your build fails if a test fails).
+- How to access AWS Environment Properties (including KMS encrypted ones).
+- How to write and use clojurescript macros.
 
 ## Motivation
 
-I wanted to produce a clojurescript lambda with very few dependencies so I could see how it worked. 
+There's a lot of information to absorb about clojurescript / node / lambda / tooling etc.
+Unfortunately given this is an area where there has been much progress it is an area where many blog posts
+and other sources of information can sometimes be misleading or contradictory.
+
+I created this project to demonstrate the above features in a single working codebase.
 
 ## Usage
 
@@ -50,11 +54,45 @@ Parameters: "repl/figwheel_repl.clj".
 
 (Make sure you resolved dependencies via lein first).
 
+## Core Async
+
+Given we are using the latest core async and clojurescript we can use the simpler
+method of requiring and referring to the core.async functions and methods.
+
+ie. (:require [clojure.core.async :as async :refer [>! <! chan go go-loop]])
+
+See lambda.aws_async.cljs.
+
 ## Testing
 
 ````./test.sh```
 
-Runs all tests - will return non zero exit code on test failure.
+Runs all your cljs.test tests via the lein-cljsbuild plug-in.
+
+And will return non zero exit code on test failure so that it works well for your CI build.
+
+See test/lambda/test_runner.cljs.
+
+## Config
+
+For a Lambda, a key source of config is the envronment variables.
+
+And often you may find you need to encrypt a environment variable such that it can be committed to source control.
+
+See src/lambda/config.cljs for an example of accessing environment variables - including aws kms encrypted ones.
+
+Here is how you encrypt a "secret" using the aws cli.
+
+```
+aws kms encrypt --key-id <kms-key-id> --plaintext "secret" --output text --query CiphertextBlob
+```
+
+## Macros
+
+To define a clojurescript macro it needs to be defined in a clojure source file.
+
+See lambda.util.macros.clj for an example of defining one and lambda.config for using it.
+
 
 ## TODO
 
@@ -81,10 +119,13 @@ really no advantage to this. So keep your compiler options as :optimizations :no
 
 If you've been reading along with the advancements about requiring node modules you might be tempted
 to do something fancy here.  Don't. The simple js/require is your friend. See lambda.aws namespace.
+If you were tagetting the browser then this advice might change - but given we are targeting node
+then this is not necessary.
 
 #### Don't set \*main-cli-fn\* 
 
-This interferes with the execution. We export our functions directly for use (see index.js).
+This interferes with the execution of your lambda as your main function is automatically call.
+We export our functions directly for use (see index.js).
 
 
 ## License

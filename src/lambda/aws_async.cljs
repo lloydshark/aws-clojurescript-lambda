@@ -1,9 +1,8 @@
 (ns lambda.aws-async
-  (:require [cljs.core.async :as async :refer [>! <! chan close!]]
-            [lambda.aws :as aws])
-  (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
+  (:require [cljs.core.async :as async :refer [>! <! chan go go-loop]]
+            [lambda.aws :as aws]))
 
-; Use Core Async for handling AWS SDK results..
+; Use Core Async for handling AWS SDK results.
 ; ie Return a core async channel than will eventually receive the result.
 
 
@@ -15,7 +14,7 @@
      (async/put! result-channel [error result])
      (async/put! result-channel [error (apply transform (list result))]))))
 
-;; Stacks
+;; Cloudformation...
 
 (defn list-stacks
   ([s3-client]
@@ -52,7 +51,7 @@
 
   )
 
-;; Buckets...
+;; S3...
 
 (defn list-buckets
   ([s3-client]
@@ -79,3 +78,11 @@
       (aws/pretty-print-result-handler error result)))
 
   )
+
+;; KMS
+
+(defn decrypt [kms-client cipher-text]
+  (let [result-channel (async/chan)]
+    (aws/decrypt kms-client cipher-text
+                 (partial handle-aws-result result-channel #(.-Plaintext %)))
+    result-channel))
