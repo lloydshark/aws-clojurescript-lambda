@@ -7,7 +7,7 @@
 
 
 (defn get-environment-variable [name]
-  (gob/getValueByKeys js/process "ENV" name))
+  (gob/getValueByKeys js/process "env" name))
 
 (defn must-get-environment-variable [name]
   (if-let [value (get-environment-variable name)]
