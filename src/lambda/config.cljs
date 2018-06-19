@@ -1,9 +1,9 @@
 (ns lambda.config
-  (:require [clojure.core.async :refer [<! go]]
+  (:require [clojure.core.async :as async :refer [<! go]]
             [lambda.aws-async :as aws-async]
             [goog.object :as gob]
             [lambda.aws :as aws])
-  (:require-macros [lambda.util.macros :refer [go>!]]))
+  (:require-macros [lambda.util.async.macros :refer [go>!]]))
 
 
 (defn get-environment-variable [name]
@@ -20,7 +20,9 @@
 (defn decrypt-environment-variable [kms-client encrypted-base64-encoded]
   (aws-async/decrypt kms-client (base-64 encrypted-base64-encoded)))
 
-(defn resolve-config [kms-client]
+(defn resolve-config
+  "Returns a channel that will receive the resolved config - or an error."
+  [kms-client]
   (go>!
     {:example    (must-get-environment-variable "EXAMPLE")
      :secret-key (<! (decrypt-environment-variable kms-client

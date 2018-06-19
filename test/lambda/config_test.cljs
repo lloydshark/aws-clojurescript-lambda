@@ -3,7 +3,7 @@
             [clojure.core.async :refer [<! go]]
             [lambda.aws-async :as aws-async]
             [lambda.config :as config])
-  (:require-macros [lambda.util.macros :refer [go>!]]))
+  (:require-macros [lambda.util.async.macros :refer [go>!]]))
 
 (defn mock-get-environment-variable [variable]
   (get {"EXAMPLE"     "example-value"

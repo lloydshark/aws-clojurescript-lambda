@@ -1,4 +1,4 @@
-(ns lambda.util.macros)
+(ns lambda.util.async.macros)
 
 (defmacro go>!
   "Create and return a channel.
@@ -7,7 +7,7 @@
   [& body]
   (let [result-channel (gensym 'result-chan)]
     `(let [~result-channel (cljs.core.async/chan)]
-       (clojure.core.async/go
+       (cljs.core.async/go
          (try
            (if-let [result (do ~@body)]
              (cljs.core.async/>! ~result-channel result)
@@ -19,3 +19,6 @@
              (println ~'eObj)
              (cljs.core.async/>! ~result-channel (js/Error. ~'eObj)))))
        ~result-channel)))
+
+(defmacro <? [ch]
+  `(lambda.util.async/throw-if-error (cljs.core.async/<! ~ch)))

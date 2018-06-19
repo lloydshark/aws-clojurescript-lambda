@@ -3,7 +3,8 @@
             [cljs.nodejs :as nodejs]
             [lambda.aws :as aws]
             [lambda.aws-async :as aws-async]
-            [lambda.config :as config]))
+            [lambda.config :as config])
+  (:require-macros [lambda.util.async.macros :refer [<?]]))
 
 (nodejs/enable-util-print!)
 
@@ -21,13 +22,17 @@
     ;; That said - if you are running in a repl it will pick up your local AWS credentials
     ;; and you could try it out
 
-    (go (let [kms-client (aws/new-kms-client "ap-southeast-2")
+    (go
+      (try
+        (let [kms-client (aws/new-kms-client "ap-southeast-2")
               s3-client  (aws/new-s3-client)
-              config     (<! (config/resolve-config kms-client))]
+              config     (<? (config/resolve-config kms-client))]
 
           (println "Resolved Config:" config)
 
-          (callback js/undefined (aws-async/list-bucket-names s3-client))))
-    )
+          (callback js/undefined (aws-async/list-bucket-names s3-client)))
+
+        (catch :default err
+          (println "Error!!!" err)))))
   )
 

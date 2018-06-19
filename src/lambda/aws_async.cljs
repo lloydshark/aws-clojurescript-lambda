@@ -1,57 +1,29 @@
 (ns lambda.aws-async
   (:require [cljs.core.async :as async :refer [>! <! chan go go-loop]]
-            [lambda.aws :as aws]))
+            [lambda.util.async :as util-async]
+            [goog.object :as gob]
+            [lambda.aws :as aws])
+  (:require-macros [lambda.util.async.macros :refer [go>! <?]]))
 
-; Use Core Async for handling AWS SDK results.
-; ie Return a core async channel than will eventually receive the result.
+;; Use Core Async for handling AWS SDK results.
+;;
+;; ie Return a core async channel that will eventually receive the result - or a js/Error.
 
-
-(defn handle-aws-result
+(defn aws-result->channel
+  "Handle the standard AWS sdk callback and place a single result (or error) onto the supplied channel.
+  - Optionally supply a transform to apply to the result.
+  - For an error ensure it is an instance of js/Error and wrap it if required."
   ([result-channel error result]
-   (handle-aws-result result-channel identity error result))
+   (aws-result->channel result-channel identity error result))
   ([result-channel transform error result]
    (if error
-     (async/put! result-channel [error result])
-     (async/put! result-channel [error (apply transform (list result))]))))
-
-;; Cloudformation...
-
-(defn list-stacks
-  ([s3-client]
-   (list-stacks s3-client nil))
-  ([s3-client next-token]
-   (let [result-channel (async/chan)]
-     (aws/list-stacks s3-client (partial handle-aws-result result-channel) next-token)
-     result-channel)))
-
-(defn list-all-stacks
-  "Returns a channel that will receive all the stacks."
-  [s3-client]
-  (let [result-channel (async/chan)]
-    (go-loop [[error stacks]  (<! (list-stacks s3-client))
-               all-stacks     (list)]
-          (if (.-NextToken stacks)
-            (recur (<! (list-stacks s3-client (.-NextToken stacks)))
-                   (concat all-stacks (map #(.-StackName %) (.-StackSummaries stacks))))
-            (>! result-channel all-stacks))
-           )
-    result-channel))
-
-(comment
-
-  (def my-client (aws/new-cfm-client "ap-southeast-2"))
-
-  (def result (list-stacks my-client))
-
-  (def all-stacks-result (list-all-stacks my-client))
-
-  (go (println (count (<! all-stacks-result))))
+     (if (instance? js/Error error)
+       (async/put! result-channel error)
+       (async/put! result-channel (js/Error. error)))
+     (async/put! result-channel [error (transform result)]))))
 
 
-
-  )
-
-;; S3...
+;; S3 -----------------------------
 
 (defn list-buckets
   ([s3-client]
@@ -59,11 +31,11 @@
   ([s3-client transform]
    (let [result-channel (async/chan)]
      (aws/list-buckets s3-client
-                       (partial handle-aws-result result-channel transform))
+                       (partial aws-result->channel result-channel transform))
      result-channel)))
 
 (defn result->bucket-names [result]
-  (map #(.-Name %) (.-Buckets result)))
+  (map #(gob/get % "Name") (gob/get result "Buckets")))
 
 (defn list-bucket-names [s3-client]
   (list-buckets s3-client result->bucket-names))
@@ -74,15 +46,18 @@
   (def my-s3-client (aws/new-s3-client))
 
   (go
-    (let [[error result] (<! (list-bucket-names my-s3-client))]
-      (aws/pretty-print-result-handler error result)))
+    (try
+      (prn (<? (list-bucket-names my-s3-client)))
+      (catch :default err
+        (println "ERROR!!!" err))))
 
   )
 
-;; KMS
+;; KMS -----------------------------
+
 
 (defn decrypt [kms-client cipher-text]
   (let [result-channel (async/chan)]
     (aws/decrypt kms-client cipher-text
-                 (partial handle-aws-result result-channel #(.-Plaintext %)))
+                 (partial aws-result->channel result-channel #(.toString (gob/get % "Plaintext"))))
     result-channel))
