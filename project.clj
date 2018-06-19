@@ -5,11 +5,8 @@
                  [org.clojure/core.async "0.4.474"]
                  [com.bhauman/figwheel-main "0.1.2-SNAPSHOT"]
                  ]
-  :plugins [[lein-npm "0.6.2"]
-            [lein-cljsbuild "1.1.7"]]
+  :plugins [[lein-cljsbuild "1.1.7"]]
   :source-paths ["src"]
-  :npm {:dependencies [[source-map-support "0.5.3"]
-                       [aws-sdk "2.188.0"]]}
   :cljsbuild
   {:test-commands {"unit-test" ["node" "target/test-runner.js"]}
    :builds [{:id "lambda-build"

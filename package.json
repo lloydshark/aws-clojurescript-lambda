@@ -1,0 +1,11 @@
+{
+  "description" : "N/A",
+  "repository" : "N/A",
+  "license" : "SEE LICENSE IN LICENSE",
+  "dependencies" : {
+    "source-map-support" : "0.5.3"
+  },
+  "devDependencies" : {
+    "aws-sdk" : "2.188.0"
+  }
+}

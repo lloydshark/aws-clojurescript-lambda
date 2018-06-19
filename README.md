@@ -22,12 +22,12 @@ I created this project to demonstrate the above features in a single working cod
 
 ## Usage
 
+You need [lein](https://leiningen.org/) and [npm](https://www.npmjs.com/) installed.
+
 ```
 git clone
 
 cd aws-clojurescript-lambda
-
-lein npm install
 
 ./build.sh
 ```
@@ -46,13 +46,31 @@ Set the handler function to be...
 app/index.main
 ```
 
+## Build and Package for AWS lambda.
+
+A simple build script (./build.sh) is provided to generate your deployable lambda zip.
+
+The built zip contains 3 things.
+
+1. Your compiled ClojureScript code in /app (built via lein-cljsbuild).
+2. Any required node_modules in /node_mdules (resolved via npm).
+3. The entrypoint for your lambda defined in /app/index.js.
+
+We define the aws-sdk as a devDependency in package.json, this means it is not included
+in our final zip and decreases package size as AWS Lambda supplies the sdk automatically.
+
+
+
 ## REPL - A figwheel-main repl in Cursive.
+
+First, make sure you have resolved any npm dependencies via
+
+```npm install```
 
 In Cursive choose "Use clojure.main in normal JVM process".
 
 Parameters: "repl/figwheel_repl.clj".
 
-(Make sure you resolved dependencies via lein first).
 
 ## Core Async
 
@@ -65,7 +83,7 @@ See lambda.aws_async.cljs.
 
 ## Testing
 
-````./test.sh```
+```./test.sh```
 
 Runs all your cljs.test tests via the lein-cljsbuild plug-in.
 
@@ -91,7 +109,7 @@ aws kms encrypt --key-id <kms-key-id> --plaintext "secret" --output text --query
 
 To define a clojurescript macro it needs to be defined in a clojure source file.
 
-See lambda.util.macros.clj for an example of defining one and lambda.config for using it.
+See src/lambda/util/async/macros.clj for an example of defining one and src/lambda/config.cljs for using it.
 
 
 ## TODO
