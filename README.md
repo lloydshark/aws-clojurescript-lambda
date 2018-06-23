@@ -1,13 +1,13 @@
 # aws-clojurescript-lambda
 
-An example project of clojurescript on aws lambda (nodejs) that demonstrates some common base requirements.
+An example project of clojurescript on aws lambda (nodejs) that demonstrates common requirements.
 
 Specifically:
 
-- How to build a package for running on aws lambda (using lein-cljsbuild & lein-npm).
-- How to setup a figwheel-main repl in Cursive for interactive repl development.
+- How to build a package for running on aws lambda (using lein-cljsbuild & npm).
+- How to setup a nodejs repl in Cursive for interactive repl development.
 - How to use the raw AWS Javascript (aws-sdk) APIs.
-- How to use core.async to handle the responses from the AWS sdk.
+- How to use core.async to handle the responses from the AWS sdk (including exception handling).
 - How to use cljs.test for writing tests (and ensure your build fails if a test fails).
 - How to access AWS Environment Properties (including KMS encrypted ones).
 - How to write and use clojurescript macros.
@@ -15,8 +15,6 @@ Specifically:
 ## Motivation
 
 There's a lot of information to absorb about clojurescript / node / lambda / tooling etc.
-Unfortunately given this is an area where there has been much progress it is an area where many blog posts
-and other sources of information can sometimes be misleading or contradictory.
 
 I created this project to demonstrate the above features in a single working codebase.
 
@@ -38,17 +36,17 @@ Produces...
 target/lambda.zip
 ```
 
-Manually upload to AWS.
+Now create a Role for the lambda to run as.
 
-Set the handler function to be...
+Once you have done that, you can create the lambda with the following.
 
 ```
-app/index.main
+./create-lambda.sh <lambda-name> arn:aws:iam::<aws account id>:role/<lambda role name>
 ```
 
 ## Build and Package for AWS lambda.
 
-A simple build script (./build.sh) is provided to generate your deployable lambda zip.
+A simple build script ```./build.sh``` is provided to generate your deployable lambda zip.
 
 The built zip contains 3 things.
 
@@ -56,30 +54,37 @@ The built zip contains 3 things.
 2. Any required node_modules in /node_mdules (resolved via npm).
 3. The entrypoint for your lambda defined in /app/index.js.
 
-We define the aws-sdk as a devDependency in package.json, this means it is not included
+The aws-sdk is defined as a devDependency in package.json, this means it is not included
 in our final zip and decreases package size as AWS Lambda supplies the sdk automatically.
-
 
 
 ## REPL - A figwheel-main repl in Cursive.
 
-First, make sure you have resolved any npm dependencies via
+First, resolve npm dependencies via
 
 ```npm install```
 
 In Cursive choose "Use clojure.main in normal JVM process".
+
+Two Choices:
+
+(a) Using the core cljs tooling.
+
+Parameters: "repl/node_repl.clj".
+
+(b) Using figwheel-main.
 
 Parameters: "repl/figwheel_repl.clj".
 
 
 ## Core Async
 
-Given we are using the latest core async and clojurescript we can use the simpler
-method of requiring and referring to the core.async functions and methods.
+Given that the latest core async and clojurescript is being used, then it is possible to
+use the simpler method of requiring and referring to the core.async functions and methods.
 
 ie. (:require [clojure.core.async :as async :refer [>! <! chan go go-loop]])
 
-See lambda.aws_async.cljs.
+See src/lambda/aws_async.cljs.
 
 ## Testing
 
@@ -107,17 +112,14 @@ aws kms encrypt --key-id <kms-key-id> --plaintext "secret" --output text --query
 
 ## Macros
 
-To define a clojurescript macro it needs to be defined in a clojure source file.
+To define a clojurescript macro it needs to be defined in a clojure (.clj) source file.
 
 See src/lambda/util/async/macros.clj for an example of defining one and src/lambda/config.cljs for using it.
 
 
 ## TODO
 
-- Package node_modules with the lambda as part of the build.
 - Provide a convenience script for creating a role for the lambda to run as.
-- Provide a convenience script for uploading the lambda.
-- Maybe use npm directly?
 - Maybe use raw clj cljs tooling instead of lein / lein-cljsbuild?
 - Provide some example usage of spec.
 
@@ -137,7 +139,7 @@ really no advantage to this. So keep your compiler options as :optimizations :no
 
 If you've been reading along with the advancements about requiring node modules you might be tempted
 to do something fancy here.  Don't. The simple js/require is your friend. See lambda.aws namespace.
-If you were tagetting the browser then this advice might change - but given we are targeting node
+If you are targetting the browser then this advice might change - but given we are targeting node
 then this is not necessary.
 
 #### Don't set \*main-cli-fn\* 
