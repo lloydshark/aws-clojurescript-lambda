@@ -3,7 +3,7 @@
             [lambda.aws-async :as aws-async]
             [goog.object :as gob]
             [lambda.aws :as aws])
-  (:require-macros [lambda.util.async.macros :refer [go>!]]))
+  (:require-macros [lambda.util.async.macros :refer [go>! <?]]))
 
 
 (defn get-environment-variable [name]
@@ -25,7 +25,7 @@
   [kms-client]
   (go>!
     {:example    (must-get-environment-variable "EXAMPLE")
-     :secret-key (<! (decrypt-environment-variable kms-client
+     :secret-key (<? (decrypt-environment-variable kms-client
                                                    (must-get-environment-variable "SECRET_KEY")))}))
 
 
