@@ -38,11 +38,17 @@ target/lambda.zip
 
 Now create a Role for the lambda to run as.
 
-Once you have done that, you can create the lambda with the following.
+```
+./create-role <aws account id> <lambda-role-name>
+```
+
+Now upload your lambda code.
 
 ```
-./create-lambda.sh <lambda-name> arn:aws:iam::<aws account id>:role/<lambda role name>
+./create-lambda.sh <aws account id> <lambda-name> <lambda role name>
 ```
+
+Done !!!
 
 ## Build and Package for AWS lambda.
 
