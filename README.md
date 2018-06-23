@@ -125,7 +125,6 @@ See src/lambda/util/async/macros.clj for an example of defining one and src/lamb
 
 ## TODO
 
-- Provide a convenience script for creating a role for the lambda to run as.
 - Maybe use raw clj cljs tooling instead of lein / lein-cljsbuild?
 - Provide some example usage of spec.
 
