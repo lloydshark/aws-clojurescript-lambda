@@ -20,7 +20,7 @@ I created this project to demonstrate the above features in a single working cod
 
 ## Usage
 
-You need [lein](https://leiningen.org/) and [npm](https://www.npmjs.com/) installed.
+You need [lein](https://leiningen.org/), [npm](https://www.npmjs.com/) and the [aws cli](https://aws.amazon.com/cli/) installed.
 
 ```
 git clone
@@ -36,13 +36,13 @@ Produces...
 target/lambda.zip
 ```
 
-Now create a Role for the lambda to run as.
+Create a Role for the lambda to run as (uses your default aws cli credentials).
 
 ```
 ./create-role <aws account id> <lambda-role-name>
 ```
 
-Now upload your lambda code.
+Upload your lambda code (uses your default aws cli credentials).
 
 ```
 ./create-lambda.sh <aws account id> <lambda-name> <lambda role name>
@@ -52,19 +52,19 @@ Done !!!
 
 ## Build and Package for AWS lambda.
 
-A simple build script ```./build.sh``` is provided to generate your deployable lambda zip.
+A simple build script ```./build.sh``` is provided to generate the deployable lambda zip.
 
 The built zip contains 3 things.
 
-1. Your compiled ClojureScript code in /app (built via lein-cljsbuild).
-2. Any required node_modules in /node_mdules (resolved via npm).
+1. The compiled ClojureScript code in /app (built via lein-cljsbuild).
+2. Any required node_modules in /node_modules (resolved via npm).
 3. The entrypoint for your lambda defined in /app/index.js.
 
 The aws-sdk is defined as a devDependency in package.json, this means it is not included
 in our final zip and decreases package size as AWS Lambda supplies the sdk automatically.
 
 
-## REPL - A figwheel-main repl in Cursive.
+## REPL - A node repl in Cursive.
 
 First, resolve npm dependencies via
 
@@ -88,7 +88,7 @@ Parameters: "repl/figwheel_repl.clj".
 Given that the latest core async and clojurescript is being used, then it is possible to
 use the simpler method of requiring and referring to the core.async functions and methods.
 
-ie. (:require [clojure.core.async :as async :refer [>! <! chan go go-loop]])
+ie. ```(:require [clojure.core.async :as async :refer [>! <! chan go go-loop]])```
 
 See src/lambda/aws_async.cljs.
 
@@ -120,7 +120,7 @@ aws kms encrypt --key-id <kms-key-id> --plaintext "secret" --output text --query
 
 To define a clojurescript macro it needs to be defined in a clojure (.clj) source file.
 
-See src/lambda/util/async/macros.clj for an example of defining one and src/lambda/config.cljs for using it.
+See ```src/lambda/util/async/macros.clj``` for an example of defining one and src/lambda/config.cljs for using it.
 
 
 ## TODO
